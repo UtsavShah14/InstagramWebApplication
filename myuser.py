@@ -6,4 +6,4 @@ class MyUser(ndb.Model):
     email_address = ndb.StringProperty()
     followers = ndb.KeyProperty(repeated = True)
     following = ndb.KeyProperty(repeated = True)
-    posts = ndb.KeyProperty(Post, repeated = True)
+    posts = ndb.KeyProperty(repeated = True)
