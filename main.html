@@ -19,8 +19,8 @@
       </div>
 
       <!-- Search form -->
-      <form class="form-inline mx-xl-5" method="post">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <form class="form-inline mx-xl-5" method="post" action="/">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search_string" required>
       </form>
 
       <ul class="nav navbar-nav ml-auto nav-flex-icons">
@@ -50,7 +50,7 @@
 
         <!-- Avtar-Profile_link -->
         <li class="nav-item avatar mx-1 mx-sm-2">
-          <a class="nav-link p-0" href="/user_profile?user_profile={{myuser.username}}">
+          <a class="nav-link p-0" href="/user_profile?user_profile={{myuser.email_address}}">
             <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-5.jpg" class="rounded-circle z-depth-0" alt="avatar image" height="35">
             {{myuser.username}}
           </a>

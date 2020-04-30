@@ -42,7 +42,7 @@ class MainPage(webapp2.RequestHandler):
         if myuser == None:
             email_address = user.email()
             name = user.email().split('@')
-            myuser = MyUser(id=user.user_id(),email_address=email_address, username = name[0])
+            myuser = MyUser(id=user.user_id(),email_address=email_address, username = name[0], followers_count = 0, following_count = 0)
             myuser.put()
 
         #With the details, we render the Home page of our application
@@ -55,6 +55,17 @@ class MainPage(webapp2.RequestHandler):
 
         template = JINJA_ENVIRONMENT.get_template('main.html')
         self.response.write(template.render(template_values))
+
+    def post(self):
+        search_result = []
+        search_string = self.request.get('search_string')
+        user_list = MyUser.query().order(MyUser.username).fetch()
+        for i in user_list:
+            temp = i.username.startswith(search_string)
+            if temp:
+                search_result.append(i.username)
+        self.response.write(search_result)
+        # self.redirect('/')
 
 app = webapp2.WSGIApplication([
         ('/',MainPage),

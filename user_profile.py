@@ -23,22 +23,23 @@ class UserProfile(webapp2.RequestHandler):
         user = users.get_current_user()
 
         if user == None:
-            template_values = {
-                'url':users.create_login_url(self.request.uri),
-            }
-
-            template = JINJA_ENVIRONMENT.get_template('main_guest.html')
-            self.response.write(template.render(template_values))
+            # template_values = {
+            #     'url':users.create_login_url(self.request.uri),
+            # }
+            #
+            # template = JINJA_ENVIRONMENT.get_template('main_guest.html')
+            # self.response.write(template.render(template_values))
             self.redirect('/')
             return
 
         myuser_key = ndb.Key('MyUser', user.user_id())
         myuser = myuser_key.get()
 
-        query = Post.query().filter(Post.post_by == user.email()).order(-Post.upload_time).fetch()
+        # self.response.write(self.request.get('user_profile'))
+        image_list = Post.query().filter(Post.post_by == self.request.get('user_profile')).order(-Post.upload_time).fetch()
 
         img_url_list = []
-        for i in query:
+        for i in image_list:
             # if img_url_list == None:
             #     url = img_url_list.insert([images.get_serving_url(i.get().uploads)])
             # else:
@@ -64,6 +65,17 @@ class UserProfile(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('user_profile.html')
         self.response.write(template.render(template_values))
 
+    def post(self):
+        search_result = []
+        search_string = self.request.get('search_string')
+        user_list = MyUser.query().order(MyUser.username).fetch()
+        for i in user_list:
+            temp = i.username.startswith(search_string)
+            if temp:
+                search_result.append(i.username)
+        self.response.write(search_result)
+        # self.redirect('/')
+        
     # def post(self):
     #     self.response.headers['Content-Type'] = 'text/html'
     #     user = users.get_current_user()
