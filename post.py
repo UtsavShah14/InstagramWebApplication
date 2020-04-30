@@ -5,6 +5,6 @@ class Post(ndb.Model):
     uploads = ndb.BlobKeyProperty()
     caption = ndb.StringProperty()
     upload_time = ndb.DateTimeProperty(auto_now_add = True)
-    # user = ndb.StringProperty()
+    post_by = ndb.StringProperty()
     # comments = ndb.textPropetry()
     # image_url = ndb.StringProperty(repeated=True)

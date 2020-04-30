@@ -27,7 +27,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         #     collection = Post(id=id)
         #     collection.put()
 
-        collection = Post(image_name=image_name, uploads=upload.key(), caption = self.request.get('caption'))
+        collection = Post(image_name=image_name, uploads=upload.key(), caption = self.request.get('caption'), post_by = user.email())
         # collection_key = ndb.Key('Post', id)
         # collection = collection_key.get()
         # collection.image_name=image_name

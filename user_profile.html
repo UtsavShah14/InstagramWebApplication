@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/main.css">
-    <meta charset="utf-8">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/main.css">
+  <meta charset="utf-8">
 
-    <title></title>
-  </head>
+  <title></title>
+
+</head>
   <body>
-
     <!-- NavBar area -->
     <nav class="navbar sticky-top navbar-expand nav-style">
 
@@ -58,18 +58,52 @@
       </ul>
     </nav>
 
-    <!-- Display Area for all the posts-->
-    <section class="display-width">
-
-      <div class="div-height" style="justify-content: center;">
+    <!-- Profile view -->
+    <div class="container">
+      <div class="row margin-setter">
+        <div class="col-lg-5 img_align margin-setter">
+          <div class="row justify-content-center">
+            <h5 class = 'username'>@{{myuser.username}}</h5>
+          </div>
+          <div class="row">
+            <a href='#'><img class = "rounded-circle img_style" src="https://image.shutterstock.com/image-illustration/profile-picture-600w-404137687.jpg" width="60%" alt="profile picture"></a>
+          </div>
+          <div class="row justify-content-center follow">
+            <button>
+              Follow/Unfllow
+            </button>
+          </div>
+        </div>
+        <div class="col-lg justify-content-center">
+          <div class="row justify-content-center">
+            <div class="row justify-content-center status shadow-inset">
+              <div class="col-lg col-sm-6">
+                <h5 class = 'h5'>{{count}} <br>Followers</h5>
+              </div>
+              <div class="col-lg col-sm-6">
+                <h5 class = 'h5'>{{count}}<br>following</h5>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <button class = "edit_button">Edit profile
+            </button>
+          </div>
+          <div class="row padding shadow-inset">
+            <h6>Description:</h6>
+          </div>
+        </div>
       </div>
-
-      <div class="div-height">
+      <div class="row" style="max-width:960px; text-align: center; margin: auto">
+        {% for i in img_url_list %}
+        <div class="col-lg-4">
+          <img src="{{i}}" width="300px" height= "300px;" alt="" style="border: 1px solid black; margin-bottom: 25px;" >
+        </div>
+        {% endfor %}
       </div>
+    </div>
 
-    </section>
-
-    <!-- My Pitcture upload form -->
+    <!-- My Picture upload form -->
     <div class="click">
       <div class="form">
         <div class="close">
@@ -83,6 +117,7 @@
         </form>
       </div>
     </div>
+
   </body>
 
   <!-- Script for post upload form -->
