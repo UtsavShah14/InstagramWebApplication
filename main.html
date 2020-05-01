@@ -50,7 +50,7 @@
 
         <!-- Avtar-Profile_link -->
         <li class="nav-item avatar mx-1 mx-sm-2">
-          <a class="nav-link p-0" href="/user_profile?user_profile={{myuser.email_address}}">
+          <a class="nav-link p-0" href="/user_profile?id={{myuser.key.id()}}">
             <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-5.jpg" class="rounded-circle z-depth-0" alt="avatar image" height="35">
             {{myuser.username}}
           </a>
@@ -68,6 +68,12 @@
       </div>
 
     </section>
+
+    {% if search_result != None %}
+    {% for i in search_result %}
+    <a href="/user_profile?id={{i.key.id()}}">{{i.username}}</a>
+    {% endfor %}
+    {% endif %}
 
     <!-- My Pitcture upload form -->
     <div class="click">

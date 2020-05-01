@@ -63,8 +63,23 @@ class MainPage(webapp2.RequestHandler):
         for i in user_list:
             temp = i.username.startswith(search_string)
             if temp:
-                search_result.append(i.username)
-        self.response.write(search_result)
+                search_result.append(i)
+
+        user = users.get_current_user()
+        myuser_key = ndb.Key('MyUser', user.user_id())
+        myuser = myuser_key.get()
+
+        template_values = {
+            'url':users.create_logout_url(self.request.uri),
+            'user':user,
+            'myuser': myuser,
+            'upload_url' : blobstore.create_upload_url('/upload'),
+            'search_result': search_result
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('main.html')
+        self.response.write(template.render(template_values))
+        # self.response.write(search_result)
         # self.redirect('/')
 
 app = webapp2.WSGIApplication([

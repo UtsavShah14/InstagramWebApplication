@@ -23,74 +23,36 @@ class UserProfile(webapp2.RequestHandler):
         user = users.get_current_user()
 
         if user == None:
-            # template_values = {
-            #     'url':users.create_login_url(self.request.uri),
-            # }
-            #
-            # template = JINJA_ENVIRONMENT.get_template('main_guest.html')
-            # self.response.write(template.render(template_values))
             self.redirect('/')
             return
 
         myuser_key = ndb.Key('MyUser', user.user_id())
         myuser = myuser_key.get()
 
-        # self.response.write(self.request.get('user_profile'))
-        image_list = Post.query().filter(Post.post_by == self.request.get('user_profile')).order(-Post.upload_time).fetch()
+        user_id = self.request.get('id')
+        profile_key = ndb.Key('MyUser', user_id)
+        profile = profile_key.get()
+        # myuser_key = profile_key
+        # myuser = profile
+        # self.response.write(profile)
+        # query = MyUser.query(MyUser.username == u_name).fetch()[0]
+        # self.response.write(query.email_address)
+
+        image_list = Post.query().filter(Post.post_by == profile.email_address).order(-Post.upload_time).fetch()
 
         img_url_list = []
         for i in image_list:
-            # if img_url_list == None:
-            #     url = img_url_list.insert([images.get_serving_url(i.get().uploads)])
-            # else:
             url = images.get_serving_url(i.uploads)
             img_url_list.append(url)
-        # self.response.write(url_list)
-
-        # post_img_key = ndb.Key('Post')
-        # post_img = post_img_key.get()
-        # img_url_list = Post.query().filter(Post.post_by==myuser.email_address).fetch()
 
         template_values = {
             'url':users.create_logout_url(self.request.uri),
-            # 'url_string':'logout',
             'user':user,
             'myuser': myuser,
+            'profile': profile,
             'img_url_list': img_url_list,
-            # 'collection_key':collection_key,
-            # 'collection': collection
             'upload_url' : blobstore.create_upload_url('/upload'),
         }
 
         template = JINJA_ENVIRONMENT.get_template('user_profile.html')
         self.response.write(template.render(template_values))
-
-    def post(self):
-        search_result = []
-        search_string = self.request.get('search_string')
-        user_list = MyUser.query().order(MyUser.username).fetch()
-        for i in user_list:
-            temp = i.username.startswith(search_string)
-            if temp:
-                search_result.append(i.username)
-        self.response.write(search_result)
-        # self.redirect('/')
-        
-    # def post(self):
-    #     self.response.headers['Content-Type'] = 'text/html'
-    #     user = users.get_current_user()
-    #     self.request.get('button')
-    #     collection_key = ndb.Key('Post', 'users.get_current_user()')
-    #     collection = collection_key.get()
-    #
-    #     if collection == None:
-    #         collection = Post(id=user.user_id())
-    #         collection.put()
-    #
-    #     template_values = {
-    #         'collection' : collection,
-    #         'upload_url' : blobstore.create_upload_url('/upload'),
-    #         }
-    #
-    #     template = JINJA_ENVIRONMENT.get_template('main.html')
-    #     self.response.write(template.render(template_values))

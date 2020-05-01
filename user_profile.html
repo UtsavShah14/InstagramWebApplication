@@ -25,6 +25,7 @@
 
       <ul class="nav navbar-nav ml-auto nav-flex-icons">
 
+        {% if myuser.username == profile.username %}
         <!-- Upload button -->
         <li class="mx-1 mx-sm-2">
           <a href="#" class = "button" id = "button">
@@ -32,7 +33,7 @@
             </svg>
           </a>
         </li>
-
+        {% endif %}
         <!-- Home page link -->
         <li class="mx-1 mx-sm-2">
           <a href="/"><svg class="bi bi-house-fill" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 3.293l6 6V13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z" clip-rule="evenodd"/></svg>
@@ -50,9 +51,9 @@
 
         <!-- Avtar-Profile_link -->
         <li class="nav-item avatar mx-1 mx-sm-2">
-          <a class="nav-link p-0" href="/user_profile?user_profile={{myuser.email_address}}">
+          <a class="nav-link p-0" href="/user_profile?id={{profile.key.id()}}">
             <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-5.jpg" class="rounded-circle z-depth-0" alt="avatar image" height="35">
-            {{myuser.username}}
+            {{profile.username}}
           </a>
         </li>
       </ul>
@@ -63,25 +64,27 @@
       <div class="row margin-setter">
         <div class="col-lg-5 img_align margin-setter">
           <div class="row justify-content-center">
-            <h5 class = 'username'>@{{myuser.username}}</h5>
+            <h5 class = 'username'>@{{profile.username}}</h5>
           </div>
           <div class="row">
             <a href='#'><img class = "rounded-circle img_style" src="https://image.shutterstock.com/image-illustration/profile-picture-600w-404137687.jpg" width="60%" alt="profile picture"></a>
           </div>
           <div class="row justify-content-center follow">
+            {% if myuser.username == profile.username %}
             <button>
               Follow/Unfllow
             </button>
+            {% endif %}
           </div>
         </div>
         <div class="col-lg justify-content-center">
           <div class="row justify-content-center">
             <div class="row justify-content-center status shadow-inset">
               <div class="col-lg col-sm-6">
-                <h5 class = 'h5'>{{myuser.followers_count}} <br>Followers</h5>
+                <h5 class = 'h5'>{{profile.followers_count}} <br>Followers</h5>
               </div>
               <div class="col-lg col-sm-6">
-                <h5 class = 'h5'>{{myuser.following_count}}<br>following</h5>
+                <h5 class = 'h5'>{{profile.following_count}}<br>following</h5>
               </div>
             </div>
           </div>
