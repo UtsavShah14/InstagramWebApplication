@@ -51,9 +51,9 @@
 
         <!-- Avtar-Profile_link -->
         <li class="nav-item avatar mx-1 mx-sm-2">
-          <a class="nav-link p-0" href="/user_profile?id={{profile.key.id()}}">
+          <a class="nav-link p-0" href="/user_profile?id={{myuser.key.id()}}">
             <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-5.jpg" class="rounded-circle z-depth-0" alt="avatar image" height="35">
-            {{profile.username}}
+            {{myuser.username}}
           </a>
         </li>
       </ul>
@@ -70,10 +70,16 @@
             <a href='#'><img class = "rounded-circle img_style" src="https://image.shutterstock.com/image-illustration/profile-picture-600w-404137687.jpg" width="60%" alt="profile picture"></a>
           </div>
           <div class="row justify-content-center follow">
-            {% if myuser.username == profile.username %}
-            <button>
-              Follow/Unfllow
-            </button>
+            {% if myuser.username != profile.username %}
+              {% if profile.key not in myuser.following %}
+            <form class="" action="/user_profile?id={{profile.key.id()}}" method="post">
+              <input type="submit" name="button" value="follow">
+            </form>
+              {% else %}
+              <form class="" action="/user_profile?id={{profile.key.id()}}" method="post">
+                <input type="submit" name="button" value="unfollow">
+              </form>
+              {% endif %}
             {% endif %}
           </div>
         </div>

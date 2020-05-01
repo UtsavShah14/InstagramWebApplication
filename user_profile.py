@@ -32,11 +32,6 @@ class UserProfile(webapp2.RequestHandler):
         user_id = self.request.get('id')
         profile_key = ndb.Key('MyUser', user_id)
         profile = profile_key.get()
-        # myuser_key = profile_key
-        # myuser = profile
-        # self.response.write(profile)
-        # query = MyUser.query(MyUser.username == u_name).fetch()[0]
-        # self.response.write(query.email_address)
 
         image_list = Post.query().filter(Post.post_by == profile.email_address).order(-Post.upload_time).fetch()
 
@@ -56,3 +51,40 @@ class UserProfile(webapp2.RequestHandler):
 
         template = JINJA_ENVIRONMENT.get_template('user_profile.html')
         self.response.write(template.render(template_values))
+
+    def post(self):
+
+        user = users.get_current_user()
+
+        myuser_key = ndb.Key('MyUser', user.user_id())
+        myuser = myuser_key.get()
+
+        user_id = self.request.get('id')
+        profile_key = ndb.Key('MyUser', user_id)
+        profile = profile_key.get()
+
+        button = self.request.get('button')
+        # self.response.write('HelloWorld')
+        if button == 'follow':
+            self.response.write('Follower Added')
+            # myuser is following profile
+            # profile followers myuser
+            followers_count = profile.followers_count + 1
+            following_count = myuser.following_count + 1
+            profile.followers_count = followers_count
+            myuser.following_count = following_count
+            profile.followers.append(myuser_key)
+            myuser.following.append(profile_key)
+            myuser.put()
+            profile.put()
+
+        if button == 'unfollow':
+            self.response.write('Unfollowed Successfully')
+            followers_count = profile.followers_count - 1
+            following_count = myuser.following_count - 1
+            profile.followers_count = followers_count
+            myuser.following_count = following_count
+            profile.followers.remove(myuser_key)
+            myuser.following.remove(profile_key)
+            myuser.put()
+            profile.put()
