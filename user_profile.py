@@ -33,7 +33,7 @@ class UserProfile(webapp2.RequestHandler):
         profile_key = ndb.Key('MyUser', user_id)
         profile = profile_key.get()
 
-        image_list = Post.query().filter(Post.post_by == profile.email_address).order(-Post.upload_time).fetch()
+        image_list = Post.query().filter(Post.post_by == profile_key).order(-Post.upload_time).fetch()
 
         img_url_list = []
         for i in image_list:

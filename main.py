@@ -45,11 +45,24 @@ class MainPage(webapp2.RequestHandler):
             myuser = MyUser(id=user.user_id(), email_address=email_address, username = name[0].lower(), followers_count = 0, following_count = 0)
             myuser.put()
 
+        query = Post.query().filter(ndb.OR(Post.post_by.IN(myuser.following),Post.post_by==myuser_key)).order(-Post.upload_time).fetch()
+        img_url_list = []
+        caption_list = []
+        username_list = []
+        for i in query:
+            username_list.append(i.post_by.get().username)
+            caption_list.append(i.caption)
+            url = images.get_serving_url(i.uploads)
+            img_url_list.append(url)
+
         #With the details, we render the Home page of our application
         template_values = {
             'url':users.create_logout_url(self.request.uri),
             'user':user,
             'myuser': myuser,
+            'img_url_list': img_url_list,
+            'username_list': username_list,
+            'caption_list':caption_list,
             'upload_url' : blobstore.create_upload_url('/upload')
         }
 
@@ -79,8 +92,6 @@ class MainPage(webapp2.RequestHandler):
 
         template = JINJA_ENVIRONMENT.get_template('main.html')
         self.response.write(template.render(template_values))
-        # self.response.write(search_result)
-        # self.redirect('/')
 
 app = webapp2.WSGIApplication([
         ('/',MainPage),

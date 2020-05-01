@@ -61,7 +61,14 @@
     <!-- Display Area for all the posts-->
     <section class="display-width">
 
-      <div class="div-height" style="justify-content: center;">
+      <div class="div-height">
+        {% for i in img_url_list %}
+        <div class="card" style="text-align: center;">
+          @{{ username_list[loop.index-1] }}
+          <img src="{{i}}" width="300px" height= "300px;" alt="" style="border: 1px solid black; margin: auto">
+          {{ caption_list[loop.index-1] }}
+        </div>
+        {% endfor %}
       </div>
 
       <div class="div-height">
