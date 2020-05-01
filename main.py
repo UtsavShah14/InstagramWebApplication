@@ -40,9 +40,9 @@ class MainPage(webapp2.RequestHandler):
 
         #If this is a new user, we create a datastore entity for it
         if myuser == None:
-            email_address = user.email()
+            email_address = user.email().lower()
             name = user.email().split('@')
-            myuser = MyUser(id=user.user_id(),email_address=email_address, username = name[0], followers_count = 0, following_count = 0)
+            myuser = MyUser(id=user.user_id(), email_address=email_address, username = name[0].lower(), followers_count = 0, following_count = 0)
             myuser.put()
 
         #With the details, we render the Home page of our application
@@ -58,7 +58,7 @@ class MainPage(webapp2.RequestHandler):
 
     def post(self):
         search_result = []
-        search_string = self.request.get('search_string')
+        search_string = self.request.get('search_string').lower()
         user_list = MyUser.query().order(MyUser.username).fetch()
         for i in user_list:
             temp = i.username.startswith(search_string)
