@@ -56,7 +56,7 @@ class MainPage(webapp2.RequestHandler):
         caption_list = []
         username_list = []
         for i in query:
-            username_list.append(i.post_by.get().username)
+            username_list.append(i.post_by.get())
             caption_list.append(i.caption)
             url = images.get_serving_url(i.uploads)
             img_url_list.append(url)
@@ -70,30 +70,6 @@ class MainPage(webapp2.RequestHandler):
             'username_list': username_list,
             'caption_list':caption_list,
             'upload_url' : blobstore.create_upload_url('/upload')
-        }
-
-        template = JINJA_ENVIRONMENT.get_template('main.html')
-        self.response.write(template.render(template_values))
-
-    def post(self):
-        search_result = []
-        search_string = self.request.get('search_string').lower()
-        user_list = MyUser.query().order(MyUser.username).fetch()
-        for i in user_list:
-            temp = i.username.startswith(search_string)
-            if temp:
-                search_result.append(i)
-
-        user = users.get_current_user()
-        myuser_key = ndb.Key('MyUser', user.user_id())
-        myuser = myuser_key.get()
-
-        template_values = {
-            'url':users.create_logout_url(self.request.uri),
-            'user':user,
-            'myuser': myuser,
-            'upload_url' : blobstore.create_upload_url('/upload'),
-            'search_result': search_result
         }
 
         template = JINJA_ENVIRONMENT.get_template('main.html')

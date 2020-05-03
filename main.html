@@ -67,14 +67,22 @@
         <div style="margin: 25px;">
         <div class="card card-timeline mx-auto">
           <div class="card-header card-header-timeline">
-            <b>{{ username_list[loop.index-1] }}</b>
+            <a href="user_profile?id={{username_list[loop.index-1].key.id()}}">
+              <b>{{ username_list[loop.index-1].username }}</b>
+            </a>
           </div>
           <div class="card-body">
             <img src="{{i}}" width="100%" alt="" style="border: 1px solid black; margin: auto">
           </div>
-          <p style="margin-left: 20px"><b>{{ username_list[loop.index-1] }}</b> {{ caption_list[loop.index-1] }}</p>
+          <p style="margin-left: 20px">
+            <a href="user_profile?id={{username_list[loop.index-1].key.id()}}">
+              <b>{{ username_list[loop.index-1].username }}</b>
+            </a> {{ caption_list[loop.index-1] }}
+          </p>
           <div class="card-footer card-footer-timeline">
-            <input type="text" name="Comment" value="" placeholder="Add a comment...">
+            <form class="" action="/" method="post">
+              <input type="text" name="Comment" value="" placeholder="Add a comment...">
+            </form>
           </div>
         </div>
       </div>
