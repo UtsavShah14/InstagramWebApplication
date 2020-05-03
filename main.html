@@ -62,34 +62,51 @@
     <!-- Display Area for all the posts-->
     <!-- <section class="display-width"> -->
 
-      <!-- <div class="div-height"> -->
-        {% for i in img_url_list %}
-        <div style="margin: 25px;">
+    {% if no_posts %}
+    <div class="alert alert-info">
+      You have no posts yet. You dont follow anyone.
+      Start Insta!!
+    </div>
+
+    {% endif %}
+      {% for i in img_url_list %}
+      <div style="margin: 25px;">
         <div class="card card-timeline mx-auto">
           <div class="card-header card-header-timeline">
-            <a href="user_profile?id={{username_list[loop.index-1].key.id()}}">
-              <b>{{ username_list[loop.index-1].username }}</b>
+            <a href="user_profile?id={{query[loop.index-1].post_by.get().key.id()}}">
+              <b>{{ query[loop.index-1].post_by.get().username }}</b>
             </a>
           </div>
           <div class="card-body">
-            <img src="{{i}}" width="100%" alt="" style="border: 1px solid black; margin: auto">
+            <img src="{{i}}" width="100%" alt="" style="border: 1px solid black; margin: auto; max-height: 500px">
           </div>
-          <p style="margin-left: 20px">
-            <a href="user_profile?id={{username_list[loop.index-1].key.id()}}">
-              <b>{{ username_list[loop.index-1].username }}</b>
-            </a> {{ caption_list[loop.index-1] }}
+          {% if query[loop.index-1].caption != '' %}
+          <p style="margin-left: 20px; margin-bottom: 0px;">
+            <a href="user_profile?id={{query[loop.index-1].post_by.get().key.id()}}">
+              <b>{{ query[loop.index-1].post_by.get().username }}</b>
+            </a> {{ query[loop.index-1].caption }}
           </p>
-          <div class="card-footer card-footer-timeline">
+          {% endif %}
+          {% if query[loop.index-1].comments != [] %}
+          {% for i in query[loop.index-1].comments %}
+          <p style="margin: 0px auto 0px 45px;">
+            <a href="user_profile?id={{i.comment_by.get().key.id()}}">
+              <b>{{ i.comment_by.get().username }}</b>
+            </a> {{ i.comment }}
+          </p>
+          {% endfor %}
+          {% endif %}
+          <div class="card-footer card-footer-timeline" style="margin-top:10px;">
             <form class="" action="/" method="post">
-              <input type="text" name="Comment" value="" placeholder="Add a comment...">
+              <input type="hidden" name="query" value="{{query[loop.index-1].key.id()}}">
+              <input type="text" maxlength="200" name="comment" placeholder="Add a comment...">
             </form>
           </div>
         </div>
       </div>
-        {% endfor %}
-      <!-- </div> -->
+      {% endfor %}
 
-    <!-- My Pitcture upload form -->
+    <!-- My Picture upload form -->
     <div class="click">
       <div class="form">
         <div class="close">
