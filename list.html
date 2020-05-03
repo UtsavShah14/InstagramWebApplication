@@ -20,13 +20,11 @@
 
       <!-- Search form -->
       <form class="form-inline mx-xl-5" method="post" action="/list">
-        <input type="hidden" name="button" value="search">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search_string" required>
       </form>
 
       <ul class="nav navbar-nav ml-auto nav-flex-icons">
 
-        {% if myuser.username == profile.username %}
         <!-- Upload button -->
         <li class="mx-1 mx-sm-2">
           <a href="#" class = "button" id = "button">
@@ -34,7 +32,7 @@
             </svg>
           </a>
         </li>
-        {% endif %}
+
         <!-- Home page link -->
         <li class="mx-1 mx-sm-2">
           <a href="/"><svg class="bi bi-house-fill" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 3.293l6 6V13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z" clip-rule="evenodd"/></svg>
@@ -60,81 +58,63 @@
       </ul>
     </nav>
 
-    <!-- Profile view -->
-    <div class="container">
-      <div class="row margin-setter">
-        <div class="col-lg-5 img_align margin-setter">
-          <div class="row justify-content-center">
-            <h5 class = 'username'>@{{profile.username}}</h5>
-          </div>
-          <div class="row">
-            <a href='#'><img class = "rounded-circle img_style" src="https://image.shutterstock.com/image-illustration/profile-picture-600w-404137687.jpg" width="60%" alt="profile picture"></a>
-          </div>
-          <div class="row justify-content-center follow">
-            {% if myuser.username != profile.username %}
-              {% if profile.key not in myuser.following %}
-                {% if profile.key in myuser.followers %}
-                <form class="" action="/user_profile?id={{profile.key.id()}}" method="post">
-                  <input type="submit" name="button" value="Follow Back">
-                </form>
-                {% else %}
-                <form class="" action="/user_profile?id={{profile.key.id()}}" method="post">
-                  <input type="submit" name="button" value="Follow">
-                </form>
-                {% endif %}
-              {% else %}
-              <form class="" action="/user_profile?id={{profile.key.id()}}" method="post">
-                <input type="submit" name="button" value="UnFollow">
-              </form>
-              {% endif %}
-            {% endif %}
-          </div>
-        </div>
-        <div class="col-lg justify-content-center">
-          <div class="row justify-content-center">
-            <div class="row justify-content-center status shadow-inset">
-              <div class="col-lg col-sm-6">
-                <!-- <form class="" action="/list" method="post">
-                  <input type="hidden" name="button" value="followers">
-                    <input type="submit" name="button" value="followers"> -->
-                    <a href="/list?id={{profile.key.id()}}&request=followers">
-                      <h5 class = 'h5'>{{profile.followers_count}}<br>Followers</h5>
-                    </a>
-                <!-- </form> -->
-              </div>
-              <div class="col-lg col-sm-6">
-                <a href="/list?id={{profile.key.id()}}&request=following">
-                  <h5 class = 'h5'>{{profile.following_count}}<br>Following</h5>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="row justify-content-center">
-            <button class = "edit_button">Edit profile
-            </button>
-          </div>
-          <div class="row padding shadow-inset">
-            <h6>Description:</h6>
-          </div>
-        </div>
-      </div>
-      {% if status == 'Followed' %}
-      <div class="alert alert-success">
-        Followed user @{{ profile.username }} Successfully!!
-      </div>
-      {% elif status == 'Unfollowed' %}
-      <div class="alert alert-success">
-        Unfollowed user @{{ profile.username }} Successfully!!
-      </div>
-      {% endif %}
-      <div class="row" style="max-width:960px; text-align: center; margin: auto">
-        {% for i in img_url_list %}
-        <div class="col-lg-4">
-          <img src="{{i}}" width="300px" height= "300px;" alt="" style="border: 1px solid black; margin-bottom: 25px;" >
-        </div>
-        {% endfor %}
-      </div>
+    <!-- Followers Block -->
+    {% if request == 'followers' %}
+    {% if profile.followers_count == 0 %}
+    <div class="alert alert-info" role="alert">
+      Dont worry! It takes some time before u get famous in the community! Keep Posting...
     </div>
+    {% else %}
+    <div class="card mx-auto">
+      <div class="card-header">
+        Follows @{{ profile.username }}
+      </div>
+    {% for i in profile.followers %}
+    <a href="/user_profile?id={{i.id()}}">
+      <div class="card-body bottom-border">
+        {{i.get().username}}
+      </div>
+    </a>
+    {% endfor %}
+    </div>
+    {% endif %}
+    <!-- Following block -->
+    {% elif request == 'following' %}
+    {% if profile.following_count == 0 %}
+    <div class="alert alert-info" role="alert">
+      Hey @{{ profile.username }}, we have a huge community to follow. Start exploring! Happy posting...
+    </div>
+    {% else %}
+    <div class="card mx-auto">
+      <div class="card-header">
+        @{{ profile.username }} Follows
+      </div>
+    {% for i in profile.following %}
+    <a href="/user_profile?id={{i.id()}}">
+      <div class="card-body bottom-border">
+        {{i.get().username}}
+      </div>
+    </a>
+    {% endfor %}
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- Search Result Block -->
+    {% if search_result %}
+    <div class="card mx-auto">
+      <div class="card-header">
+        Search Result
+      </div>
+    {% for i in search_result %}
+      <a href="/user_profile?id={{i.key.id()}}">
+        <div class="card-body bottom-border">
+          {{i.username}}
+        </div>
+      </a>
+    {% endfor %}
+    </div>
+    {% endif %}
 
     <!-- My Picture upload form -->
     <div class="click">
@@ -164,4 +144,5 @@
           document.querySelector('.click').style.display = 'none';
         });
   </script>
-</html>
+
+  </html>

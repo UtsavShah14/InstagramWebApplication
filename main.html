@@ -19,7 +19,8 @@
       </div>
 
       <!-- Search form -->
-      <form class="form-inline mx-xl-5" method="post" action="/">
+      <form class="form-inline mx-xl-5" method="post" action="/list">
+        <input type="hidden" name="button" value="search">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search_string" required>
       </form>
 
@@ -59,28 +60,26 @@
     </nav>
 
     <!-- Display Area for all the posts-->
-    <section class="display-width">
+    <!-- <section class="display-width"> -->
 
-      <div class="div-height">
+      <!-- <div class="div-height"> -->
         {% for i in img_url_list %}
-        <div class="card" style="text-align: center;">
-          @{{ username_list[loop.index-1] }}
-          <img src="{{i}}" width="300px" height= "300px;" alt="" style="border: 1px solid black; margin: auto">
-          {{ caption_list[loop.index-1] }}
+        <div style="margin: 25px;">
+        <div class="card card-timeline mx-auto">
+          <div class="card-header card-header-timeline">
+            <b>{{ username_list[loop.index-1] }}</b>
+          </div>
+          <div class="card-body">
+            <img src="{{i}}" width="100%" alt="" style="border: 1px solid black; margin: auto">
+          </div>
+          <p style="margin-left: 20px"><b>{{ username_list[loop.index-1] }}</b> {{ caption_list[loop.index-1] }}</p>
+          <div class="card-footer card-footer-timeline">
+            <input type="text" name="Comment" value="" placeholder="Add a comment...">
+          </div>
         </div>
+      </div>
         {% endfor %}
-      </div>
-
-      <div class="div-height">
-      </div>
-
-    </section>
-
-    {% if search_result != None %}
-    {% for i in search_result %}
-    <a href="/user_profile?id={{i.key.id()}}">{{i.username}}</a>
-    {% endfor %}
-    {% endif %}
+      <!-- </div> -->
 
     <!-- My Pitcture upload form -->
     <div class="click">

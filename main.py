@@ -11,6 +11,7 @@ from myuser import MyUser
 from post import Post
 from uploadhandler import UploadHandler
 from user_profile import UserProfile
+from list import List
 
 JINJA_ENVIRONMENT = jinja2.Environment(
 loader = jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -45,7 +46,12 @@ class MainPage(webapp2.RequestHandler):
             myuser = MyUser(id=user.user_id(), email_address=email_address, username = name[0].lower(), followers_count = 0, following_count = 0)
             myuser.put()
 
-        query = Post.query().filter(ndb.OR(Post.post_by.IN(myuser.following),Post.post_by==myuser_key)).order(-Post.upload_time).fetch()
+
+        if myuser.following != []:
+            query = Post.query().filter(ndb.OR(Post.post_by.IN(myuser.following),Post.post_by==myuser_key)).order(-Post.upload_time).fetch(50)
+        else:
+            query = Post.query().filter(Post.post_by==myuser_key).order(-Post.upload_time).fetch(50)
+
         img_url_list = []
         caption_list = []
         username_list = []
@@ -96,5 +102,6 @@ class MainPage(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
         ('/',MainPage),
         ('/upload', UploadHandler),
-        ('/user_profile', UserProfile)
+        ('/user_profile', UserProfile),
+        ('/list', List)
         ], debug = True)

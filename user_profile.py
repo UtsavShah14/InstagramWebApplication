@@ -64,11 +64,9 @@ class UserProfile(webapp2.RequestHandler):
         profile = profile_key.get()
 
         button = self.request.get('button')
-        # self.response.write('HelloWorld')
-        if button == 'follow':
-            self.response.write('Follower Added')
-            # myuser is following profile
-            # profile followers myuser
+
+        if button == 'Follow' or button == 'Follow Back':
+            status = 'Followed'
             followers_count = profile.followers_count + 1
             following_count = myuser.following_count + 1
             profile.followers_count = followers_count
@@ -78,8 +76,8 @@ class UserProfile(webapp2.RequestHandler):
             myuser.put()
             profile.put()
 
-        if button == 'unfollow':
-            self.response.write('Unfollowed Successfully')
+        if button == 'UnFollow':
+            status = 'Unfollowed'
             followers_count = profile.followers_count - 1
             following_count = myuser.following_count - 1
             profile.followers_count = followers_count
@@ -88,3 +86,23 @@ class UserProfile(webapp2.RequestHandler):
             myuser.following.remove(profile_key)
             myuser.put()
             profile.put()
+
+        image_list = Post.query().filter(Post.post_by == profile_key).order(-Post.upload_time).fetch()
+
+        img_url_list = []
+        for i in image_list:
+            url = images.get_serving_url(i.uploads)
+            img_url_list.append(url)
+
+        template_values = {
+            'url':users.create_logout_url(self.request.uri),
+            'user':user,
+            'myuser': myuser,
+            'profile': profile,
+            'img_url_list': img_url_list,
+            'status': status,
+            'upload_url' : blobstore.create_upload_url('/upload'),
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('user_profile.html')
+        self.response.write(template.render(template_values))
