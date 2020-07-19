@@ -29,12 +29,15 @@ class UserProfile(webapp2.RequestHandler):
         myuser_key = ndb.Key('MyUser', user.user_id())
         myuser = myuser_key.get()
 
+        #id, key of the user whos' rprofile is to be displayed
         user_id = self.request.get('id')
         profile_key = ndb.Key('MyUser', user_id)
         profile = profile_key.get()
 
+        #query for user uploads
         image_list = Post.query().filter(Post.post_by == profile_key).order(-Post.upload_time).fetch()
 
+        #creating urls for the user uploads
         img_url_list = []
         for i in image_list:
             url = images.get_serving_url(i.uploads)

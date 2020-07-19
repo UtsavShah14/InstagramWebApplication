@@ -30,10 +30,12 @@ class List(webapp2.RequestHandler):
         myuser_key = ndb.Key('MyUser', user.user_id())
         myuser = myuser_key.get()
 
+        #id, key of the user whos' profile is to be displayed
         user_id = self.request.get('id')
         profile_key = ndb.Key('MyUser', user_id)
         profile = profile_key.get()
 
+        #Decides if we have to display followers or following list
         request = self.request.get('request')
 
         template_values = {
